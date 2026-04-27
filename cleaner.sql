@@ -1027,32 +1027,47 @@ where fecha_pago between '2008-01-01' and '2008-12-31';
 
 /* Reto H.Genera un listado con el código de pedido, código de cliente, fecha esperada y fecha de entrega de los pedidos que no han sido entregados a tiempo.*/
 
-show tables;
-describe pedido;
-select codigo_pedido, fecha_pedido, fecha_esperada, fecha_entrega, estado, comentarios, codigo_cliente from pedido where fecha_entrega > fecha_esperada;
-select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega from pedido where fecha_entrega > fecha_esperada;
+SHOW TABLES;
+
+DESCRIBE pedido;
+
+SELECT codigo_pedido, fecha_pedido, fecha_esperada, fecha_entrega, estado, comentarios, codigo_cliente
+FROM pedido;
+
+-- Pedidos no entregados a tiempo: entregados tarde O aún sin entregar
+SELECT codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+FROM pedido
+WHERE fecha_entrega > fecha_esperada
+   OR fecha_entrega IS NULL; 
+
 
 /* RETO I  Genera un listado con el código de pedido, código de cliente, fecha esperada y fecha de entrega de los pedidos cuya fecha de entrega ha sido al menos dos días antes de la fecha esperada.*/
 
 
-SHOW TABLES;
-
+Utilizando la función ADDDATE de MySQL.
+Utilizando la función DA
+TEDIFF de MySQL.
+¿Sería posible resolver esta consulta utilizando el operador de suma + o resta -?*/
+/*RESPUESTA:
+Sí es posible utilizar operadores de suma o resta con fechas, pero no es recomendable. Lo correcto es usar funciones como DATEDIFF o ADDDATE, ya que garantizan mayor precisión y compatibilidad en MySQL.*/
+show tables;
 describe pedido;
 
-select * from pedido;
 
-select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
-from pedido;
-
-/*RESPUESTA (ADDDATE)*/
+-- Utilizando la función ADDDATE de MySQL:
 select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
 from pedido
-where fecha_entrega <= ADDDATE(fecha_esperada, INTERVAL -2 day);
+where fecha_entrega <= ADDDATE(fecha_esperada, INTERVAL -2 DAY);
 
-/*RESPUESTA (DATEDIFF)*/
+-- Utilizando la función DATEDIFF de MySQL:
 select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
 from pedido
 where DATEDIFF(fecha_esperada, fecha_entrega) >= 2;
+
+-- Utilizando el operador resta -:
+select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+from pedido
+where (fecha_esperada - fecha_entrega) >= 2;
 
 /* Reto J.Genera un listado de todos los pedidos que fueron rechazados en 2009.*/
 
