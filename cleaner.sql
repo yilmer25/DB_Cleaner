@@ -1003,27 +1003,27 @@ Utilizando la función YEAR de MySQL.*/
 
 SHOW TABLES;
 
-DESCRIBE pago;
+describe pago;
 
-SELECT * FROM pago;
+select * from pago;
 
-SELECT codigo_cliente, fecha_pago
-FROM pago;
+select codigo_cliente, fecha_pago
+from pago;
 
 /*RESPUESTA YEAR*/
-SELECT DISTINCT codigo_cliente
-FROM pago
-WHERE YEAR(fecha_pago) = 2008;
+select distinct codigo_cliente
+from pago
+where year(fecha_pago) = 2008;
 
 /*RESPUESTA DATE_FORMAT*/
-SELECT DISTINCT codigo_cliente
-FROM pago
-WHERE DATE_FORMAT(fecha_pago, '%Y') = '2008';
+select distinct codigo_cliente
+from pago
+where DATE_FORMAT(fecha_pago, '%Y') = '2008';
 
 /*RESPUESTA SIN FUNCIONES*/
-SELECT DISTINCT codigo_cliente
-FROM pago
-WHERE fecha_pago BETWEEN '2008-01-01' AND '2008-12-31';
+select distinct codigo_cliente
+from pago
+where fecha_pago between '2008-01-01' and '2008-12-31';
 
 /* Reto H.Genera un listado con el código de pedido, código de cliente, fecha esperada y fecha de entrega de los pedidos que no han sido entregados a tiempo.*/
 
@@ -1037,22 +1037,22 @@ select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega from pedido 
 
 SHOW TABLES;
 
-DESCRIBE pedido;
+describe pedido;
 
-SELECT * FROM pedido;
+select * from pedido;
 
-SELECT codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
-FROM pedido;
+select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+from pedido;
 
 /*RESPUESTA (ADDDATE)*/
-SELECT codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
-FROM pedido
-WHERE fecha_entrega <= ADDDATE(fecha_esperada, INTERVAL -2 DAY);
+select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+from pedido
+where fecha_entrega <= ADDDATE(fecha_esperada, INTERVAL -2 day);
 
 /*RESPUESTA (DATEDIFF)*/
-SELECT codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
-FROM pedido
-WHERE DATEDIFF(fecha_esperada, fecha_entrega) >= 2;
+select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+from pedido
+where DATEDIFF(fecha_esperada, fecha_entrega) >= 2;
 
 /* Reto J.Genera un listado de todos los pedidos que fueron rechazados en 2009.*/
 
@@ -1065,77 +1065,77 @@ select codigo_pedido, fecha_pedido, fecha_esperada, fecha_entrega, estado, comen
 
 SHOW TABLES;
 
-DESCRIBE pedido;
+describe pedido;
 
-SELECT * FROM pedido;
+select * from pedido;
 
-SELECT codigo_pedido, fecha_entrega
-FROM pedido;
+select codigo_pedido, fecha_entrega
+from pedido;
 
-SELECT *
-FROM pedido
-WHERE MONTH(fecha_entrega) = 1;
+select *
+from pedido
+where month(fecha_entrega) = 1;
 
 /*RETO L. Genera un listado con todos los pagos que se realizaron en el año 2008 mediante Paypal. Ordene el resultado de mayor a menor.*/
 
 SHOW TABLES;
 
-DESCRIBE pago;
+describe pago;
 
-SELECT * FROM pago;
+select * from pago;
 
-SELECT codigo_cliente, forma_pago, fecha_pago, total
-FROM pago;
+select codigo_cliente, forma_pago, fecha_pago, total
+from pago;
 
-SELECT *
-FROM pago
-WHERE YEAR(fecha_pago) = 2008
-AND forma_pago = 'Paypal'
-ORDER BY total DESC;
+select *
+from pago
+where year(fecha_pago) = 2008
+and forma_pago = 'Paypal'
+order by total desc;
 
 /*RETO M. Genera un listado con todas las formas de pago que aparecen en la tabla pago. Tenga en cuenta que no deben aparecer formas de pago repetidas.*/
 
 SHOW TABLES;
 
-DESCRIBE pago;
+describe pago;
 
-SELECT * FROM pago;
+select * from pago;
 
-SELECT forma_pago
-FROM pago;
+select forma_pago
+from pago;
 
-SELECT DISTINCT forma_pago
-FROM pago;
+select distinct forma_pago
+from pago;
 
 /*RETO N. Genera un listado con todos los productos que pertenecen a la gama Ornamentales y que tienen más de 100 unidades en stock. El listado deberá estar ordenado por su precio de venta, mostrando en primer lugar los de mayor precio.*/
 
 SHOW TABLES;
 
-DESCRIBE producto;
+describe producto;
 
-SELECT * FROM producto;
+select * from producto;
 
-SELECT nombre, gama, cantidad_en_stock, precio_venta
-FROM producto;
+select nombre, gama, cantidad_en_stock, precio_venta
+from producto;
 
-SELECT *
-FROM producto
-WHERE gama = 'Ornamentales'
-AND cantidad_en_stock > 100
-ORDER BY precio_venta DESC;
+select *
+from producto
+where gama = 'Ornamentales'
+and cantidad_en_stock > 100
+order by precio_venta desc;
 
 /*RETO O. Genera un listado con todos los clientes que sean de la ciudad de Madrid y cuyo representante de ventas tenga el código de empleado 11 o 30.*/
 
 SHOW TABLES;
 
-DESCRIBE cliente;
+describe cliente;
 
-SELECT * FROM cliente;
+select * from cliente;
 
-SELECT nombre_cliente, ciudad, codigo_empleado_rep_ventas
-FROM cliente;
+select nombre_cliente, ciudad, codigo_empleado_rep_ventas
+from cliente;
 
-SELECT *
-FROM cliente
-WHERE ciudad = 'Madrid'
-AND codigo_empleado_rep_ventas IN (11, 30);
+select *
+from cliente
+where ciudad = 'Madrid'
+and codigo_empleado_rep_ventas in (11, 30);
