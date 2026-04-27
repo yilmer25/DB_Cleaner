@@ -939,7 +939,7 @@ SELECT codigo_empleado, nombre, apellido1, apellido2,
 extension, email, codigo_oficina, codigo_jefe
 puesto FROM EMPLEADO;
 
-/* RETO 1 - Retorna un listado con el código de oficina y 
+/* RETO 1 (A) - Retorna un listado con el código de oficina y 
 la ciudad donde hay oficinas */
 
 show tables;
@@ -951,7 +951,7 @@ select o.codigo_oficina as cod_oficina, o.ciudad country,
 concat(o.codigo_oficina,' - ', o.ciudad) as cod_ciudad_oficina
  from oficina o;
  
- /* RETO 2 - Retorna un listado con la ciudad y 
+ /* RETO 2 (B)- Retorna un listado con la ciudad y 
  el telefono de las oficinas en España. */
  
  show tables;
@@ -960,7 +960,7 @@ select codigo_oficina, ciudad, pais, region, codigo_postal, telefono, linea_dire
 select ciudad, telefono from oficina where pais = 'España';
 
  
- /* RETO 3 - Retorna el listado con todos los clientes que sean
+ /* RETO 3 (C)- Retorna el listado con todos los clientes que sean
  de la ciudad de Madrid y cuyo representante de ventas tenga 
  el código de empleado 11 ó 30. */
  
@@ -998,12 +998,61 @@ describe pedido;
 select codigo_pedido, fecha_pedido, fecha_esperada, fecha_entrega, estado, comentarios, codigo_cliente from pedido;
 select DISTINCT estado from pedido;
 
+/* RETO G  Genera un listado con el código de cliente de aquellos clientes que realizaron algún pago en 2008. Tenga en cuenta que deberá eliminar aquellos códigos de cliente que aparezcan repetidos. Resuelva la consulta:
+Utilizando la función YEAR de MySQL.*/
+
+SHOW TABLES;
+
+DESCRIBE pago;
+
+SELECT * FROM pago;
+
+SELECT codigo_cliente, fecha_pago
+FROM pago;
+
+/*RESPUESTA YEAR*/
+SELECT DISTINCT codigo_cliente
+FROM pago
+WHERE YEAR(fecha_pago) = 2008;
+
+/*RESPUESTA DATE_FORMAT*/
+SELECT DISTINCT codigo_cliente
+FROM pago
+WHERE DATE_FORMAT(fecha_pago, '%Y') = '2008';
+
+/*RESPUESTA SIN FUNCIONES*/
+SELECT DISTINCT codigo_cliente
+FROM pago
+WHERE fecha_pago BETWEEN '2008-01-01' AND '2008-12-31';
+
 /* Reto H.Genera un listado con el código de pedido, código de cliente, fecha esperada y fecha de entrega de los pedidos que no han sido entregados a tiempo.*/
 
 show tables;
 describe pedido;
 select codigo_pedido, fecha_pedido, fecha_esperada, fecha_entrega, estado, comentarios, codigo_cliente from pedido where fecha_entrega > fecha_esperada;
 select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega from pedido where fecha_entrega > fecha_esperada;
+
+/* RETO I  Genera un listado con el código de pedido, código de cliente, fecha esperada y fecha de entrega de los pedidos cuya fecha de entrega ha sido al menos dos días antes de la fecha esperada.*/
+
+
+SHOW TABLES;
+
+DESCRIBE pedido;
+
+SELECT * FROM pedido;
+
+SELECT codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+FROM pedido;
+
+/*RESPUESTA (ADDDATE)*/
+SELECT codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+FROM pedido
+WHERE fecha_entrega <= ADDDATE(fecha_esperada, INTERVAL -2 DAY);
+
+/*RESPUESTA (DATEDIFF)*/
+SELECT codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+FROM pedido
+WHERE DATEDIFF(fecha_esperada, fecha_entrega) >= 2;
 
 /* Reto J.Genera un listado de todos los pedidos que fueron rechazados en 2009.*/
 
@@ -1012,7 +1061,81 @@ describe pedido;
 select codigo_pedido, fecha_pedido, fecha_esperada, fecha_entrega, estado, comentarios, codigo_cliente from pedido where estado = 'Rechazado' AND YEAR(fecha_pedido) = 2009;
 select codigo_pedido, fecha_pedido, fecha_esperada, fecha_entrega, estado, comentarios, codigo_cliente from pedido where estado = 'Rechazado' AND YEAR(fecha_pedido) = 2009;
 
+/*RETO K. Genera un listado de todos los pedidos que han sido entregados en el mes de enero de cualquier año.*/
 
+SHOW TABLES;
 
+DESCRIBE pedido;
 
+SELECT * FROM pedido;
 
+SELECT codigo_pedido, fecha_entrega
+FROM pedido;
+
+SELECT *
+FROM pedido
+WHERE MONTH(fecha_entrega) = 1;
+
+/*RETO L. Genera un listado con todos los pagos que se realizaron en el año 2008 mediante Paypal. Ordene el resultado de mayor a menor.*/
+
+SHOW TABLES;
+
+DESCRIBE pago;
+
+SELECT * FROM pago;
+
+SELECT codigo_cliente, forma_pago, fecha_pago, total
+FROM pago;
+
+SELECT *
+FROM pago
+WHERE YEAR(fecha_pago) = 2008
+AND forma_pago = 'Paypal'
+ORDER BY total DESC;
+
+/*RETO M. Genera un listado con todas las formas de pago que aparecen en la tabla pago. Tenga en cuenta que no deben aparecer formas de pago repetidas.*/
+
+SHOW TABLES;
+
+DESCRIBE pago;
+
+SELECT * FROM pago;
+
+SELECT forma_pago
+FROM pago;
+
+SELECT DISTINCT forma_pago
+FROM pago;
+
+/*RETO N. Genera un listado con todos los productos que pertenecen a la gama Ornamentales y que tienen más de 100 unidades en stock. El listado deberá estar ordenado por su precio de venta, mostrando en primer lugar los de mayor precio.*/
+
+SHOW TABLES;
+
+DESCRIBE producto;
+
+SELECT * FROM producto;
+
+SELECT nombre, gama, cantidad_en_stock, precio_venta
+FROM producto;
+
+SELECT *
+FROM producto
+WHERE gama = 'Ornamentales'
+AND cantidad_en_stock > 100
+ORDER BY precio_venta DESC;
+
+/*RETO O. Genera un listado con todos los clientes que sean de la ciudad de Madrid y cuyo representante de ventas tenga el código de empleado 11 o 30.*/
+
+SHOW TABLES;
+
+DESCRIBE cliente;
+
+SELECT * FROM cliente;
+
+SELECT nombre_cliente, ciudad, codigo_empleado_rep_ventas
+FROM cliente;
+
+SELECT *
+FROM cliente
+WHERE ciudad = 'Madrid'
+AND codigo_empleado_rep_ventas IN (11, 30);
